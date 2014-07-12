@@ -36,13 +36,13 @@ public class BukCombatPlugin extends JavaPlugin {
     }
 
     public void smokeBombEffects(Location loc) {
-        int r = 5;
+        int r = 1;
         int pRadius = 64 * 64;
         double x = loc.getX();
         double y = loc.getY();
         double z = loc.getZ();
-        Packet packet = new PacketPlayOutWorldParticles("explode", (float)x, (float)y, (float)z,
-                (float)r, (float)r, (float)r, 4F, 50);
+        Packet packet = new PacketPlayOutWorldParticles("hugeexplosion", (float)x, (float)y, (float)z,
+                (float)r, (float)r, (float)r, 0.05F, 5);
         for(Player p : getServer().getOnlinePlayers()) {
             if(p.getLocation().distanceSquared(loc) > pRadius) continue;
             ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);

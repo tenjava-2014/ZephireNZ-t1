@@ -1,5 +1,6 @@
 package nz.co.noirland.tenjava;
 
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.enchantments.EnchantmentTarget;
@@ -50,7 +51,20 @@ public class CombatListener implements Listener {
         Snowball ball = (Snowball) event.getEntity();
         List<MetadataValue> meta = ball.getMetadata("smoke-bomb");
         if(meta.isEmpty()) return; // Is not a smokebomb
-        plugin.smokeBombEffects(event.getEntity().getLocation());
+        final Location loc = event.getEntity().getLocation();
+        new BukkitRunnable() {
+
+            private int count = 10;
+
+            @Override
+            public void run() {
+                if(count-- <= 0) {
+                    this.cancel();
+                    return;
+                }
+                plugin.smokeBombEffects(loc);
+            }
+        }.runTaskTimer(plugin, 0, 10L);
     }
 
     /**
