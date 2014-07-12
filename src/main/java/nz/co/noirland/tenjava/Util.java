@@ -35,8 +35,11 @@ public class Util {
     }
 
     public static boolean roll(int chance) {
-        double rand = Math.random() * 100;
-        return chance < rand;
+        return chance < rand(100);
 
+    }
+
+    public static double rand(double max) {
+          return Math.random() * max;
     }
 }

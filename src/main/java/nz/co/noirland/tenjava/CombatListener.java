@@ -1,6 +1,7 @@
 package nz.co.noirland.tenjava;
 
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -70,6 +71,7 @@ public class CombatListener implements Listener {
             }
         }
         weapon.setDurability((short) (weapon.getDurability() + dur));
+        attacker.playSound(target.getLocation(), Sound.ANVIL_LAND, 0.2F, (float) (1.5D + Util.rand(0.5)));
     }
 
     /**
