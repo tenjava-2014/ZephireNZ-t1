@@ -6,14 +6,14 @@ import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Snowball;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.enchantment.EnchantItemEvent;
-import org.bukkit.event.entity.CreatureSpawnEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.PotionSplashEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.*;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.BrewerInventory;
 import org.bukkit.inventory.ItemStack;
@@ -32,6 +32,23 @@ public class CombatListener implements Listener {
     @EventHandler
     public void onPotionSplash(PotionSplashEvent event) {
 
+    }
+
+    /**
+     * Smoke bomb listener. Detects when a smoke bomb has hit the ground.
+     */
+    @EventHandler
+    public void onProjectileHit(ProjectileHitEvent event) {
+        if(!(event.getEntity() instanceof Snowball)) return;
+        Snowball ball = (Snowball) event.getEntity();
+    }
+
+    @EventHandler
+    public void onUse(PlayerInteractEvent event) {
+        Player p = event.getPlayer();
+        if(!p.getItemInHand().isSimilar(new SmokeBomb())) return;
+        if(event.getAction() != Action.RIGHT_CLICK_AIR) return;
+        new TagSmokeBombTask(p);
     }
 
     /**
