@@ -1,14 +1,10 @@
 package nz.co.noirland.tenjava;
 
-import net.minecraft.server.v1_7_R3.Packet;
-import net.minecraft.server.v1_7_R3.PacketPlayOutWorldParticles;
-import nz.co.noirland.tenjava.smokebomb.SmokeBomb;
+import nz.co.noirland.tenjava.hardness.HardnessListener;
+import nz.co.noirland.tenjava.throwables.SmokeBomb;
+import nz.co.noirland.tenjava.throwables.ThrowablesListener;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_7_R3.entity.CraftPlayer;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -25,7 +21,8 @@ public class BukCombatPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         inst = this;
-        getServer().getPluginManager().registerEvents(new CombatListener(), this);
+        getServer().getPluginManager().registerEvents(new HardnessListener(), this);
+        getServer().getPluginManager().registerEvents(new ThrowablesListener(), this);
         addRecipes();
     }
 
@@ -37,17 +34,4 @@ public class BukCombatPlugin extends JavaPlugin {
         getServer().addRecipe(smoke);
     }
 
-    public void smokeEffect(Location loc) {
-        int r = 1;
-        int pRadius = 64 * 64;
-        double x = loc.getX();
-        double y = loc.getY();
-        double z = loc.getZ();
-        Packet packet = new PacketPlayOutWorldParticles("hugeexplosion", (float)x, (float)y, (float)z,
-                (float)r, (float)r, (float)r, 0.05F, 5);
-        for(Entity e : Util.entitiesInRadius(loc, pRadius)) {
-            if(!(e instanceof Player)) continue;
-            ((CraftPlayer) e).getHandle().playerConnection.sendPacket(packet);
-        }
-    }
 }

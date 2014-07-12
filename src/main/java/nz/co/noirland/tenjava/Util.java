@@ -2,9 +2,13 @@ package nz.co.noirland.tenjava;
 
 import net.minecraft.server.v1_7_R3.NBTTagCompound;
 import net.minecraft.server.v1_7_R3.NBTTagList;
+import net.minecraft.server.v1_7_R3.Packet;
+import net.minecraft.server.v1_7_R3.PacketPlayOutWorldParticles;
 import org.bukkit.Location;
+import org.bukkit.craftbukkit.v1_7_R3.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_7_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 
@@ -58,5 +62,19 @@ public class Util {
         }
 
         return ret;
+    }
+
+    public static void smokeEffect(Location loc) {
+        int r = 1;
+        int pRadius = 64 * 64;
+        double x = loc.getX();
+        double y = loc.getY();
+        double z = loc.getZ();
+        Packet packet = new PacketPlayOutWorldParticles("hugeexplosion", (float)x, (float)y, (float)z,
+                (float)r, (float)r, (float)r, 0.05F, 5);
+        for(Entity e : entitiesInRadius(loc, pRadius)) {
+            if(!(e instanceof Player)) continue;
+            ((CraftPlayer) e).getHandle().playerConnection.sendPacket(packet);
+        }
     }
 }

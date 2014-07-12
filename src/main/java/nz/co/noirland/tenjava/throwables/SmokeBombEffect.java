@@ -1,6 +1,7 @@
-package nz.co.noirland.tenjava.smokebomb;
+package nz.co.noirland.tenjava.throwables;
 
 import nz.co.noirland.tenjava.BukCombatPlugin;
+import nz.co.noirland.tenjava.Util;
 import org.bukkit.Location;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -20,6 +21,6 @@ public class SmokeBombEffect extends BukkitRunnable {
             this.cancel();
             return;
         }
-        BukCombatPlugin.inst().smokeEffect(loc);
+        Util.smokeEffect(loc);
     }
 }

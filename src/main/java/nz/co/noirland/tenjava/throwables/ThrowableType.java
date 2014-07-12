@@ -1,7 +1,5 @@
-package nz.co.noirland.tenjava;
+package nz.co.noirland.tenjava.throwables;
 
-import nz.co.noirland.tenjava.flashbang.FlashBang;
-import nz.co.noirland.tenjava.smokebomb.SmokeBomb;
 import org.bukkit.inventory.ItemStack;
 
 public enum ThrowableType {
