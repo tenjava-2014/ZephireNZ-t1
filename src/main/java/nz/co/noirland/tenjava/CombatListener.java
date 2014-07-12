@@ -1,6 +1,5 @@
 package nz.co.noirland.tenjava;
 
-import org.bukkit.ChatColor;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -20,6 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CombatListener implements Listener {
+
+    PluginConfig config = PluginConfig.inst();
 
     /**
      * EventHandler for splash potions. This will be pushed off to various things depending on what was splashed.
@@ -48,12 +49,21 @@ public class CombatListener implements Listener {
     public void onPlayerHit(EntityDamageByEntityEvent event) {
         // Don't care about anything that aren't players
         if(event.getDamager().getType() != EntityType.PLAYER || event.getEntity().getType() != EntityType.PLAYER) return;
+
         Player attacker = (Player) event.getDamager();
         Player target = (Player) event.getEntity();
 
         if(event.getCause() != EntityDamageEvent.DamageCause.ENTITY_ATTACK) return;
         ItemStack weapon = attacker.getItemInHand();
-
+        ItemStack[] armour = target.getInventory().getArmorContents();
+        short dur = 0;
+        for(ItemStack item : armour) {
+            List<String> lore = item.getItemMeta().getLore();
+            if(lore.contains(BukCombatPlugin.HARDNESS_NAME)) {
+                dur += config.getHardnessDamage();
+            }
+        }
+        weapon.setDurability((short) (weapon.getDurability() - dur));
     }
 
     /**
@@ -86,14 +96,14 @@ public class CombatListener implements Listener {
         if(event.getExpLevelCost() != 30) return; // Must be 30 levels to get
 
         if(!EnchantmentTarget.ARMOR.includes(item.getType())) return; // Ignore things that aren't armour
-        if(!Util.roll(PluginConfig.inst().getHardnessChance())) return;
+        if(!Util.roll(config.getHardnessChance())) return;
 
         List<String> lore = new ArrayList<String>();
         ItemMeta meta = item.getItemMeta();
         if(meta.hasLore()) {
             lore = item.getItemMeta().getLore();
         }
-        lore.add(0, ChatColor.GRAY + "Hardness I");
+        lore.add(0, BukCombatPlugin.HARDNESS_NAME);
         meta.setLore(lore);
         item.setItemMeta(meta);
     }

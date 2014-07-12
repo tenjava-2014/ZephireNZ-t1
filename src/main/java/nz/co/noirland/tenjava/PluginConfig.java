@@ -26,8 +26,13 @@ public class PluginConfig {
         return config.getInt("enchants.hardened.chance", 30);
     }
 
-    public int getHardnessMult() {
-        return config.getInt("enchant.hardness.multiplier", 3);
+    /**
+     * Gets the durability inflicted when a player with hardness is hit.
+     * This is added for each item that the player is wearing.
+     * @return damage to inflict
+     */
+    public int getHardnessDamage() {
+        return config.getInt("enchant.hardness.damage", 2);
     }
 
 }
