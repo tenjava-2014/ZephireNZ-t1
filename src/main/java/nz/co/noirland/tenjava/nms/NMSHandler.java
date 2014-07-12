@@ -1,7 +1,7 @@
 package nz.co.noirland.tenjava.nms;
 
 import nz.co.noirland.tenjava.BukCombatPlugin;
-import nz.co.noirland.tenjava.nms.v1_7_3_R3.NMS;
+import nz.co.noirland.tenjava.nms.v1_7_R3.NMS;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
@@ -29,9 +29,9 @@ public abstract class NMSHandler {
             }
             throw new Exception();
         } catch (Exception e) {
-            e.printStackTrace();
             Logger log = BukCombatPlugin.inst().getLogger();
             log.severe("Minecraft version " + ver + " unsupported!");
+            e.printStackTrace();
             Bukkit.getPluginManager().disablePlugin(BukCombatPlugin.inst());
             return null;
         }

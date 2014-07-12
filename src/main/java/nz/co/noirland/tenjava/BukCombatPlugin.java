@@ -1,6 +1,7 @@
 package nz.co.noirland.tenjava;
 
 import nz.co.noirland.tenjava.hardness.HardnessListener;
+import nz.co.noirland.tenjava.throwables.FlashBang;
 import nz.co.noirland.tenjava.throwables.SmokeBomb;
 import nz.co.noirland.tenjava.throwables.ThrowablesListener;
 import org.bukkit.ChatColor;
@@ -32,6 +33,13 @@ public class BukCombatPlugin extends JavaPlugin {
         smoke.addIngredient(3, Material.SULPHUR);
         smoke.addIngredient(2, Material.SUGAR);
         getServer().addRecipe(smoke);
+
+        ShapelessRecipe flash = new ShapelessRecipe(new FlashBang());
+        smoke.addIngredient(1, Material.PAPER);
+        smoke.addIngredient(3, Material.SULPHUR);
+        smoke.addIngredient(1, Material.GLOWSTONE);
+        smoke.addIngredient(1, Material.REDSTONE);
+        getServer().addRecipe(flash);
     }
 
 }

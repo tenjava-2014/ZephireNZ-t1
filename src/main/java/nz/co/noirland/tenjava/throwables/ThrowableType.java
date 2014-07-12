@@ -8,8 +8,8 @@ public enum ThrowableType {
     FLASH_BANG;
 
     public static ThrowableType getType(ItemStack item) {
-        if(item.isSimilar(new SmokeBomb())) return SMOKE_BOMB;
-        if(item.isSimilar(new FlashBang())) return FLASH_BANG;
+        if(new SmokeBomb().isSimilar(item)) return SMOKE_BOMB;
+        if(new FlashBang().isSimilar(item)) return FLASH_BANG;
         return null;
     }
 

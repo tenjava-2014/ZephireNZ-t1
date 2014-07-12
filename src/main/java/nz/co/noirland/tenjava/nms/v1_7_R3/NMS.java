@@ -1,4 +1,4 @@
-package nz.co.noirland.tenjava.nms.v1_7_3_R3;
+package nz.co.noirland.tenjava.nms.v1_7_R3;
 
 import net.minecraft.server.v1_7_R3.NBTTagCompound;
 import net.minecraft.server.v1_7_R3.NBTTagList;
