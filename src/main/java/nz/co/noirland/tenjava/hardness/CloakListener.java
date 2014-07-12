@@ -92,6 +92,9 @@ public class CloakListener implements Listener {
         player.getInventory().setChestplate(null);
     }
 
+    /**
+     * Prevent cloaked players from staying cloaked.
+     */
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
@@ -101,6 +104,9 @@ public class CloakListener implements Listener {
         }
     }
 
+    /**
+     * Remove all effects from the player, add Weakness, break item, give back item.
+     */
     private void removeEffects(Player player, ItemStack chest) {
         chest.setDurability((short)(chest.getDurability() + 100));
         player.removePotionEffect(PotionEffectType.INVISIBILITY);

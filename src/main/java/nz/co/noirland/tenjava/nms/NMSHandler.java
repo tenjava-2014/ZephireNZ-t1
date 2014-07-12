@@ -37,8 +37,20 @@ public abstract class NMSHandler {
         }
     }
 
+    /**
+     * Add an enchantment glow to an item.
+     */
     public abstract ItemStack addEnchantGlow(ItemStack item);
 
+    /**
+     * Spawns a bunch of particles in the given area
+     * @param effect Effect to use
+     * @param loc Location of center of effect
+     * @param size Radius to randomly spawn effects in
+     * @param speed How quickly effect disappears
+     * @param count  Number of effects to spawn
+     * @param radius Radius to find players to show to.
+     */
     public abstract void spawnParticlesForRadius(String effect, Location loc, int size, float speed, int count, int radius);
 
 }
