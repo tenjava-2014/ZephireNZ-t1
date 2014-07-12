@@ -1,11 +1,14 @@
 package nz.co.noirland.tenjava;
 
+import org.bukkit.Material;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.enchantment.EnchantItemEvent;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
@@ -48,22 +51,25 @@ public class CombatListener implements Listener {
     @EventHandler
     public void onPlayerHit(EntityDamageByEntityEvent event) {
         // Don't care about anything that aren't players
-        if(event.getDamager().getType() != EntityType.PLAYER || event.getEntity().getType() != EntityType.PLAYER) return;
+        if(event.getDamager().getType() != EntityType.PLAYER) return;
 
         Player attacker = (Player) event.getDamager();
-        Player target = (Player) event.getEntity();
+        LivingEntity target = (LivingEntity) event.getEntity();
 
         if(event.getCause() != EntityDamageEvent.DamageCause.ENTITY_ATTACK) return;
         ItemStack weapon = attacker.getItemInHand();
-        ItemStack[] armour = target.getInventory().getArmorContents();
+        ItemStack[] armour = target.getEquipment().getArmorContents();
         short dur = 0;
         for(ItemStack item : armour) {
+            if(!item.hasItemMeta()) continue;
+            if(!item.getItemMeta().hasLore()) continue;
+
             List<String> lore = item.getItemMeta().getLore();
             if(lore.contains(BukCombatPlugin.HARDNESS_NAME)) {
                 dur += config.getHardnessDamage();
             }
         }
-        weapon.setDurability((short) (weapon.getDurability() - dur));
+        weapon.setDurability((short) (weapon.getDurability() + dur));
     }
 
     /**
@@ -73,6 +79,23 @@ public class CombatListener implements Listener {
     @EventHandler
     public void onBrew(BrewEvent event) {
 
+    }
+
+    @EventHandler
+    public void onSpawn(CreatureSpawnEvent event) {
+        if(event.getEntityType() != EntityType.ZOMBIE) return;
+        event.getEntity().setCanPickupItems(true);
+        ItemStack item = new ItemStack(Material.DIAMOND_CHESTPLATE, 1);
+        List<String> lore = new ArrayList<String>();
+        ItemMeta meta = item.getItemMeta();
+        if(meta.hasLore()) {
+            lore = item.getItemMeta().getLore();
+        }
+        lore.add(0, BukCombatPlugin.HARDNESS_NAME);
+        meta.setLore(lore);
+        item.setItemMeta(meta);
+
+        event.getEntity().getEquipment().setChestplate(item);
     }
 
     @EventHandler
