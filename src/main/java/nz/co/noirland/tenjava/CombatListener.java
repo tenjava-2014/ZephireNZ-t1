@@ -4,9 +4,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
-import org.bukkit.event.inventory.BrewEvent;
-import org.bukkit.event.inventory.CraftItemEvent;
-import org.bukkit.event.inventory.PrepareItemCraftEvent;
+import org.bukkit.event.inventory.*;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.inventory.BrewerInventory;
 
 public class CombatListener implements Listener {
 
@@ -16,6 +16,15 @@ public class CombatListener implements Listener {
      */
     @EventHandler
     public void onPotionSplash(PotionSplashEvent event) {
+
+    }
+
+    /**
+     * Called when player drinks a potion.
+     * @param event
+     */
+    @EventHandler
+    public void onConsule(PlayerItemConsumeEvent event) {
 
     }
 
@@ -40,11 +49,19 @@ public class CombatListener implements Listener {
 
     @EventHandler
     public void onPrepCraft(PrepareItemCraftEvent event) {
-
+        event.getRecipe();
     }
 
     @EventHandler
     public void onCraft(CraftItemEvent event) {
+        event.getRecipe();
+    }
+
+    @EventHandler
+    public void onClickBrew(InventoryClickEvent event) {
+        if(event.getInventory().getType() != InventoryType.BREWING) return;
+        BrewerInventory inv = (BrewerInventory) event.getInventory();
+
 
     }
 
