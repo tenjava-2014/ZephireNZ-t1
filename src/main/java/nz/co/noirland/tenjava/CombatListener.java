@@ -4,6 +4,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
+import org.bukkit.event.inventory.BrewEvent;
+import org.bukkit.event.inventory.CraftItemEvent;
+import org.bukkit.event.inventory.PrepareItemCraftEvent;
 
 public class CombatListener implements Listener {
 
@@ -23,6 +26,25 @@ public class CombatListener implements Listener {
      */
     @EventHandler
     public void onPlayerHit(EntityDamageByEntityEvent event) {
+
+    }
+
+    /**
+     * For managing potion creation.
+     * @param event
+     */
+    @EventHandler
+    public void onBrew(BrewEvent event) {
+
+    }
+
+    @EventHandler
+    public void onPrepCraft(PrepareItemCraftEvent event) {
+
+    }
+
+    @EventHandler
+    public void onCraft(CraftItemEvent event) {
 
     }
 
