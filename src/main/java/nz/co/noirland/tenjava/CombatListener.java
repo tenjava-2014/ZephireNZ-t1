@@ -3,10 +3,7 @@ package nz.co.noirland.tenjava;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.enchantments.EnchantmentTarget;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Snowball;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -18,14 +15,23 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.BrewerInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
+import org.bukkit.projectiles.ProjectileSource;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 
 public class CombatListener implements Listener {
 
+    private final Set<ProjectileSource> thrownSnowball = new HashSet<ProjectileSource>();
+
     PluginConfig config = PluginConfig.inst();
+    BukCombatPlugin plugin = BukCombatPlugin.inst();
 
     /**
      * EventHandler for splash potions. This will be pushed off to various things depending on what was splashed.
@@ -44,7 +50,7 @@ public class CombatListener implements Listener {
         Snowball ball = (Snowball) event.getEntity();
         List<MetadataValue> meta = ball.getMetadata("smoke-bomb");
         if(meta.isEmpty()) return; // Is not a smokebomb
-        BukCombatPlugin.inst().smokeBombEffects(event.getEntity().getLocation());
+        plugin.smokeBombEffects(event.getEntity().getLocation());
     }
 
     /**
@@ -54,10 +60,24 @@ public class CombatListener implements Listener {
      */
     @EventHandler
     public void onUse(PlayerInteractEvent event) {
-        Player p = event.getPlayer();
+        final Player p = event.getPlayer();
         if(!(new SmokeBomb().isSimilar(event.getItem()))) return;
-        if(event.getAction() != Action.RIGHT_CLICK_AIR) return;
-        new TagSmokeBombTask(p);
+        if(event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+        thrownSnowball.add(p);
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                thrownSnowball.remove(p);
+            }
+        }.runTaskLater(plugin, 0);
+    }
+
+    @EventHandler
+    public void onThrown(ProjectileLaunchEvent event) {
+        Projectile e = event.getEntity();
+        if(!(e instanceof Snowball)) return;
+        if(!thrownSnowball.contains((e.getShooter()))) return;
+        e.setMetadata("smoke-bomb", new FixedMetadataValue(plugin, true));
     }
 
     /**

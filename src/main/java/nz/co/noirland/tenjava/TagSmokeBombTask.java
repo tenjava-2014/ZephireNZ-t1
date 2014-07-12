@@ -18,9 +18,11 @@ public class TagSmokeBombTask extends BukkitRunnable {
 
     @Override
     public void run() {
-        for(Entity e : player.getNearbyEntities(2,2,2)) {
+        int radius = 5 * 5;
+        for(Entity e : player.getWorld().getEntities()) {
             if(!(e instanceof Snowball)) continue;
             if(((Snowball) e).getShooter() != player) continue;
+            if(e.getLocation().distanceSquared(player.getLocation()) > radius) continue;
             e.setMetadata("smoke-bomb", new FixedMetadataValue(plugin, true));
         }
     }
