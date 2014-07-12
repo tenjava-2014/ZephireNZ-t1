@@ -28,7 +28,6 @@ public class CombatListener implements Listener {
 
     /**
      * EventHandler for splash potions. This will be pushed off to various things depending on what was splashed.
-     * @param event
      */
     @EventHandler
     public void onPotionSplash(PotionSplashEvent event) {
@@ -37,7 +36,6 @@ public class CombatListener implements Listener {
 
     /**
      * Called when player drinks a potion.
-     * @param event
      */
     @EventHandler
     public void onConsule(PlayerItemConsumeEvent event) {
@@ -47,7 +45,6 @@ public class CombatListener implements Listener {
     /**
      * EventHandler for 'Hardened' custom enchant.
      * Listens for when a player is hit by another player.
-     * @param event
      */
     @EventHandler
     public void onPlayerHit(EntityDamageByEntityEvent event) {
@@ -76,7 +73,6 @@ public class CombatListener implements Listener {
 
     /**
      * For managing potion creation.
-     * @param event
      */
     @EventHandler
     public void onBrew(BrewEvent event) {
@@ -113,7 +109,6 @@ public class CombatListener implements Listener {
     /**
      * Enchantment event for 'Hardness' custom enchant.
      * When enchanting, you have a chance of getting this enchant when using 30 levels.
-     * @param event
      */
     @EventHandler
     public void onEnchant(EnchantItemEvent event) {
