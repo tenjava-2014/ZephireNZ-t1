@@ -25,7 +25,6 @@ public class FlashBang extends ItemStack {
         meta.setDisplayName(SMOKE_BOMB_NAME);
         meta.setLore(lore);
         setItemMeta(meta);
-
     }
 
 }

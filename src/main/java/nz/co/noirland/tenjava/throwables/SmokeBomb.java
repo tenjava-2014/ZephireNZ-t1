@@ -24,20 +24,6 @@ public class SmokeBomb extends ItemStack {
         meta.setDisplayName(SMOKE_BOMB_NAME);
         meta.setLore(lore);
         setItemMeta(meta);
-
     }
-
-//    @Override
-//    public boolean isSimilar(ItemStack other) {
-//        if(this == other) return true;
-//        if(getType() != other.getType()) return false;
-//        if(getDurability() != other.getDurability()) return false;
-//
-//        ItemMeta thisMeta = getItemMeta();
-//        ItemMeta thatMeta = other.getItemMeta();
-//        if(!thisMeta.getLore().equals(thatMeta.getLore())) return false;
-//        if(!thisMeta.getDisplayName().equals(thatMeta.getDisplayName())) return false;
-//        return true;
-//    }
 
 }

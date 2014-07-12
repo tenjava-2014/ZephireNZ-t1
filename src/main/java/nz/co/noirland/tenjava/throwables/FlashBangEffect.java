@@ -14,8 +14,9 @@ public class FlashBangEffect {
         for(Entity e : Util.entitiesInRadius(bang, 7)) {
             if(!(e instanceof LivingEntity)) continue;
             LivingEntity le = (LivingEntity) e;
-            le.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 10 * 20, 10, true));
-            le.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 3 * 20, 10, true));
+            le.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 8 * 20, 1, true));
+            le.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 6 * 20, 1, true));
+            le.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 6 * 20, 3, true));
         }
     }
 }

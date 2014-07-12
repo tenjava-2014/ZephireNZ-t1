@@ -75,5 +75,4 @@ public class ThrowablesListener implements Listener {
                 e.setMetadata("flash-bang", new FixedMetadataValue(plugin, true));
         }
     }
-
 }
