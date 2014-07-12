@@ -40,3 +40,8 @@ Enchantments:
 
 Throwables:
 * Flash Bang:
+    * Crafted with 3 Gunpowder, 1 Paper, 1 Glowstone dust, 1 redstone dust  (Shapeless)
+    * Will stun your enemies, slowing them, blinding them, and giving them nausea
+* Smoke Bomb:
+    * Crafted with 3 Gunpowder, 1 Paper, 2 Sugar (Shapeless)
+    * Fills the area with smoke, allowing for your quick escape or attack
