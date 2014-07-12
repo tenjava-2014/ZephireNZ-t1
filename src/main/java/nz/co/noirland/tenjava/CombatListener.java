@@ -18,6 +18,7 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.BrewerInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.metadata.MetadataValue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,12 +42,20 @@ public class CombatListener implements Listener {
     public void onProjectileHit(ProjectileHitEvent event) {
         if(!(event.getEntity() instanceof Snowball)) return;
         Snowball ball = (Snowball) event.getEntity();
+        List<MetadataValue> meta = ball.getMetadata("smoke-bomb");
+        if(meta.isEmpty()) return; // Is not a smokebomb
+        BukCombatPlugin.inst().smokeBombEffects(event.getEntity().getLocation());
     }
 
+    /**
+     * Because we can't check what item was used to create a snowball, we instead
+     * have to tag all snowballs around a player as being a smoke bomb.
+     * @param event
+     */
     @EventHandler
     public void onUse(PlayerInteractEvent event) {
         Player p = event.getPlayer();
-        if(!p.getItemInHand().isSimilar(new SmokeBomb())) return;
+        if(!(new SmokeBomb().isSimilar(event.getItem()))) return;
         if(event.getAction() != Action.RIGHT_CLICK_AIR) return;
         new TagSmokeBombTask(p);
     }
