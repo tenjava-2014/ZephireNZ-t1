@@ -2,9 +2,14 @@ package nz.co.noirland.tenjava;
 
 import net.minecraft.server.v1_7_R3.NBTTagCompound;
 import net.minecraft.server.v1_7_R3.NBTTagList;
+import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_7_R3.inventory.CraftItemStack;
+import org.bukkit.entity.Entity;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class Util {
 
@@ -41,5 +46,17 @@ public class Util {
 
     public static double rand(double max) {
           return Math.random() * max;
+    }
+
+    public static Set<Entity> entitiesInRadius(Location loc, int radius) {
+        radius *= radius;
+        Set<Entity> ret = new HashSet<Entity>();
+        for(Entity e : loc.getWorld().getEntities()) {
+            if(e.getLocation().distanceSquared(loc) <= radius) {
+                ret.add(e);
+            }
+        }
+
+        return ret;
     }
 }

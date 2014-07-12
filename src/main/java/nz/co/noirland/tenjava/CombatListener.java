@@ -1,5 +1,7 @@
 package nz.co.noirland.tenjava;
 
+import nz.co.noirland.tenjava.flashbang.FlashBangEffect;
+import nz.co.noirland.tenjava.smokebomb.SmokeBombEffect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -22,14 +24,13 @@ import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 
 public class CombatListener implements Listener {
 
-    private final Set<ProjectileSource> thrownSnowball = new HashSet<ProjectileSource>();
+    private final HashMap<ProjectileSource, ThrowableType> thrown= new HashMap<ProjectileSource, ThrowableType>();
 
     PluginConfig config = PluginConfig.inst();
     BukCombatPlugin plugin = BukCombatPlugin.inst();
@@ -50,21 +51,15 @@ public class CombatListener implements Listener {
         if(!(event.getEntity() instanceof Snowball)) return;
         Snowball ball = (Snowball) event.getEntity();
         List<MetadataValue> meta = ball.getMetadata("smoke-bomb");
-        if(meta.isEmpty()) return; // Is not a smokebomb
         final Location loc = event.getEntity().getLocation();
-        new BukkitRunnable() {
 
-            private int count = 10;
-
-            @Override
-            public void run() {
-                if(count-- <= 0) {
-                    this.cancel();
-                    return;
-                }
-                plugin.smokeBombEffects(loc);
+        if(ball.hasMetadata("smoke-bomb")) {
+            new SmokeBombEffect(loc);
+        } else if(ball.hasMetadata("flash-bang")) {
+            if(event.getEntity().getShooter() instanceof Player) {
+                new FlashBangEffect(loc);
             }
-        }.runTaskTimer(plugin, 0, 10L);
+        }
     }
 
     /**
@@ -75,13 +70,15 @@ public class CombatListener implements Listener {
     @EventHandler
     public void onUse(PlayerInteractEvent event) {
         final Player p = event.getPlayer();
-        if(!(new SmokeBomb().isSimilar(event.getItem()))) return;
+        if(!ThrowableType.isThrowable(event.getItem())) return;
         if(event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
-        thrownSnowball.add(p);
+
+        ThrowableType type = ThrowableType.getType(event.getItem());
+        thrown.put(p, type);
         new BukkitRunnable() {
             @Override
             public void run() {
-                thrownSnowball.remove(p);
+                thrown.remove(p);
             }
         }.runTaskLater(plugin, 0);
     }
@@ -90,15 +87,20 @@ public class CombatListener implements Listener {
     public void onThrown(ProjectileLaunchEvent event) {
         Projectile e = event.getEntity();
         if(!(e instanceof Snowball)) return;
-        if(!thrownSnowball.contains((e.getShooter()))) return;
-        e.setMetadata("smoke-bomb", new FixedMetadataValue(plugin, true));
+        if(!thrown.containsKey(e.getShooter())) return;
+        switch(thrown.get(e.getShooter())) {
+            case SMOKE_BOMB:
+                e.setMetadata("smoke-bomb", new FixedMetadataValue(plugin, true));
+            case FLASH_BANG:
+                e.setMetadata("flash-bang", new FixedMetadataValue(plugin, true));
+        }
     }
 
     /**
      * Called when player drinks a potion.
      */
     @EventHandler
-    public void onConsule(PlayerItemConsumeEvent event) {
+    public void onConsume(PlayerItemConsumeEvent event) {
 
     }
 
@@ -127,6 +129,7 @@ public class CombatListener implements Listener {
                 dur += config.getHardnessDamage();
             }
         }
+        //TODO: Check for non-tool weapons
         weapon.setDurability((short) (weapon.getDurability() + dur));
         attacker.playSound(target.getLocation(), Sound.ANVIL_LAND, 0.2F, (float) (1.5D + Util.rand(0.5)));
     }

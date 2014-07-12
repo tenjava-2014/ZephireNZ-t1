@@ -1,4 +1,4 @@
-package nz.co.noirland.tenjava;
+package nz.co.noirland.tenjava.smokebomb;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
