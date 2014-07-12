@@ -1,9 +1,11 @@
 package nz.co.noirland.tenjava;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
@@ -11,6 +13,10 @@ import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.BrewerInventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CombatListener implements Listener {
 
@@ -66,6 +72,23 @@ public class CombatListener implements Listener {
     @EventHandler
     public void onCraft(CraftItemEvent event) {
         event.getRecipe();
+    }
+
+    @EventHandler
+    public void onEnchant(EnchantItemEvent event) {
+        ItemStack item = event.getItem();
+        if(event.getExpLevelCost() != 30) return; // Must be 30 levels to get
+
+        if(!Util.roll(PluginConfig.inst().getHardenedChance())) return;
+
+        List<String> lore = new ArrayList<String>();
+        ItemMeta meta = item.getItemMeta();
+        if(meta.hasLore()) {
+            lore = item.getItemMeta().getLore();
+        }
+        lore.add(0, ChatColor.GRAY + "Hardness I");
+        meta.setLore(lore);
+        item.setItemMeta(meta);
     }
 
     @EventHandler

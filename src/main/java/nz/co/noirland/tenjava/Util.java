@@ -33,4 +33,10 @@ public class Util {
         nms.setTag(tag);
         return CraftItemStack.asCraftMirror(nms);
     }
+
+    public static boolean roll(int chance) {
+        double rand = Math.random() * 100;
+        return chance < rand;
+
+    }
 }

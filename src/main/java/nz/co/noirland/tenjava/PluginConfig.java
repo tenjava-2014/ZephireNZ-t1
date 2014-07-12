@@ -18,4 +18,12 @@ public class PluginConfig {
         this.config = BukCombatPlugin.inst().getConfig();
     }
 
+    /**
+     * Chance out of 100 of hardened being added to item.
+     * @return integer chance
+     */
+    public int getHardenedChance() {
+        return config.getInt("enchants.hardened.chance", 30);
+    }
+
 }
