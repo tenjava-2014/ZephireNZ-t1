@@ -1,6 +1,7 @@
 package nz.co.noirland.tenjava;
 
 import org.bukkit.ChatColor;
+import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -74,12 +75,18 @@ public class CombatListener implements Listener {
         event.getRecipe();
     }
 
+    /**
+     * Enchantment event for 'Hardness' custom enchant.
+     * When enchanting, you have a chance of getting this enchant when using 30 levels.
+     * @param event
+     */
     @EventHandler
     public void onEnchant(EnchantItemEvent event) {
         ItemStack item = event.getItem();
         if(event.getExpLevelCost() != 30) return; // Must be 30 levels to get
 
-        if(!Util.roll(PluginConfig.inst().getHardenedChance())) return;
+        if(!EnchantmentTarget.ARMOR.includes(item.getType())) return; // Ignore things that aren't armour
+        if(!Util.roll(PluginConfig.inst().getHardnessChance())) return;
 
         List<String> lore = new ArrayList<String>();
         ItemMeta meta = item.getItemMeta();

@@ -22,8 +22,12 @@ public class PluginConfig {
      * Chance out of 100 of hardened being added to item.
      * @return integer chance
      */
-    public int getHardenedChance() {
+    public int getHardnessChance() {
         return config.getInt("enchants.hardened.chance", 30);
+    }
+
+    public int getHardnessMult() {
+        return config.getInt("enchant.hardness.multiplier", 3);
     }
 
 }
