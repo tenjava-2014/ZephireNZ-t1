@@ -1,14 +1,8 @@
 package nz.co.noirland.tenjava;
 
-import net.minecraft.server.v1_7_R3.NBTTagCompound;
-import net.minecraft.server.v1_7_R3.NBTTagList;
-import net.minecraft.server.v1_7_R3.Packet;
-import net.minecraft.server.v1_7_R3.PacketPlayOutWorldParticles;
+import nz.co.noirland.tenjava.nms.NMSHandler;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_7_R3.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_7_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 
@@ -22,36 +16,39 @@ public class Util {
     }
 
     /**
-     * Uses NMS code to add the enchanted glow to an item.
-     *
-     * TODO: Abstractify NMS code, for safety
-     * @param item ItemStack to add glow to
-     * @return ItemStack with glow added
+     * Adds the enchantment effect to any item.
+     * @param item Item to have enchant effect added
+     * @return ItemStack with added enchant effect
      */
     public static ItemStack enchant(ItemStack item) {
-        net.minecraft.server.v1_7_R3.ItemStack nms = CraftItemStack.asNMSCopy(item);
-        NBTTagCompound tag = null;
-        if (!nms.hasTag()) {
-            tag = new NBTTagCompound();
-            nms.setTag(tag);
-        }
-        if (tag == null)
-            tag = nms.getTag();
-        NBTTagList ench = new NBTTagList();
-        tag.set("ench", ench);
-        nms.setTag(tag);
-        return CraftItemStack.asCraftMirror(nms);
+        return NMSHandler.inst().addEnchantGlow(item);
     }
 
+    /**
+     * Use a chance out of 100 to give a random number.
+     * @param chance Chance out of 100
+     * @return random true/false, weighted by chance
+     */
     public static boolean roll(int chance) {
         return chance < rand(100);
 
     }
 
+    /**
+     * Simple random generator to go from 0-max
+     * @param max Maximum (non-inclusive) to go to.
+     * @return random double between 0 and max.
+     */
     public static double rand(double max) {
           return Math.random() * max;
     }
 
+    /**
+     * Finds all entities that are in the (circular) radius given from a given point.
+     * @param loc Center of search area
+     * @param radius Radius of search area
+     * @return List of all entities in the area
+     */
     public static Set<Entity> entitiesInRadius(Location loc, int radius) {
         radius *= radius;
         Set<Entity> ret = new HashSet<Entity>();
@@ -64,17 +61,11 @@ public class Util {
         return ret;
     }
 
+    /**
+     * Spawns a explosion effect on the given location.
+     * @param loc
+     */
     public static void smokeEffect(Location loc) {
-        int r = 1;
-        int pRadius = 64 * 64;
-        double x = loc.getX();
-        double y = loc.getY();
-        double z = loc.getZ();
-        Packet packet = new PacketPlayOutWorldParticles("hugeexplosion", (float)x, (float)y, (float)z,
-                (float)r, (float)r, (float)r, 0.05F, 5);
-        for(Entity e : entitiesInRadius(loc, pRadius)) {
-            if(!(e instanceof Player)) continue;
-            ((CraftPlayer) e).getHandle().playerConnection.sendPacket(packet);
-        }
+        NMSHandler.inst().spawnParticlesForRadius("hugeexplosion", loc, 1, 0.05F, 5, 64 * 64);
     }
 }
