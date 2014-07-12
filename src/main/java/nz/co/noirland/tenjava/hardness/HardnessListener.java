@@ -103,10 +103,13 @@ public class HardnessListener implements Listener {
         item.setItemMeta(meta);
     }
 
+    /**
+     * Manually disable enchanting if it's a hardness item.
+     */
     @EventHandler
     public void onPreEnchant(PrepareItemEnchantEvent event) {
         List<String> lore = event.getItem().getItemMeta().getLore();
-        if (lore.contains(BukCombatPlugin.CLOAK_NAME)) {
+        if (lore != null && lore.contains(BukCombatPlugin.HARDNESS_NAME)) {
             event.setCancelled(true);
         }
     }

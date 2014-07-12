@@ -51,10 +51,13 @@ public class CloakListener implements Listener {
 //        Util.enchant(item);
     }
 
+    /**
+     * Manually disable enchanting if it's a cloak item.
+     */
     @EventHandler
     public void onPreEnchant(PrepareItemEnchantEvent event) {
         List<String> lore = event.getItem().getItemMeta().getLore();
-        if (lore.contains(BukCombatPlugin.CLOAK_NAME)) {
+        if (lore != null && lore.contains(BukCombatPlugin.CLOAK_NAME)) {
             event.setCancelled(true);
         }
     }
