@@ -16,7 +16,8 @@ import org.bukkit.inventory.ItemStack;
 public class NMS extends NMSHandler {
 
     public ItemStack addEnchantGlow(ItemStack item) {
-        net.minecraft.server.v1_7_R3.ItemStack nms = CraftItemStack.asNMSCopy(item);
+        net.minecraft.server.v1_7_R3.ItemStack nms;
+            nms = CraftItemStack.asNMSCopy(item);
         NBTTagCompound tag = null;
         if (!nms.hasTag()) {
             tag = new NBTTagCompound();

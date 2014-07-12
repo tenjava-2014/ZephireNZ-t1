@@ -39,6 +39,8 @@ public class HardnessListener implements Listener {
 
         if(event.getCause() != EntityDamageEvent.DamageCause.ENTITY_ATTACK) return;
         ItemStack weapon = attacker.getItemInHand();
+        if(!EnchantmentTarget.WEAPON.includes(weapon)) return;
+
         ItemStack[] armour = target.getEquipment().getArmorContents();
         short dur = 0;
         for(ItemStack item : armour) {
@@ -50,13 +52,14 @@ public class HardnessListener implements Listener {
                 dur += config.getHardnessDamage();
             }
         }
-        //TODO: Check for non-tool weapons
+
         weapon.setDurability((short) (weapon.getDurability() + dur));
         attacker.playSound(target.getLocation(), Sound.ANVIL_LAND, 0.2F, (float) (1.5D + Util.rand(0.5)));
     }
 
     /**
-     * DEBUG event for giving all zombies Hardness armour,
+     * DEBUG event for giving all zombies Hardness armour
+     * (It's hard to test with only yourself :3)
      * TODO: REMOVE
      */
     @EventHandler

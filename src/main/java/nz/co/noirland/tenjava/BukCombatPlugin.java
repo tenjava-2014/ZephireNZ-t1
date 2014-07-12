@@ -1,5 +1,6 @@
 package nz.co.noirland.tenjava;
 
+import nz.co.noirland.tenjava.hardness.CloakListener;
 import nz.co.noirland.tenjava.hardness.HardnessListener;
 import nz.co.noirland.tenjava.throwables.FlashBang;
 import nz.co.noirland.tenjava.throwables.SmokeBomb;
@@ -14,6 +15,7 @@ public class BukCombatPlugin extends JavaPlugin {
     private static BukCombatPlugin inst;
 
     public static final String HARDNESS_NAME = ChatColor.GRAY + "Hardness I";
+    public static final String CLOAK_NAME = ChatColor.GRAY + "Cloak I";
 
     public static BukCombatPlugin inst() {
         return inst;
@@ -24,6 +26,7 @@ public class BukCombatPlugin extends JavaPlugin {
         inst = this;
         getServer().getPluginManager().registerEvents(new HardnessListener(), this);
         getServer().getPluginManager().registerEvents(new ThrowablesListener(), this);
+        getServer().getPluginManager().registerEvents(new CloakListener(), this);
         addRecipes();
     }
 

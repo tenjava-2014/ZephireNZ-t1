@@ -1,0 +1,7 @@
+enchants:
+    cloak:
+        chance: 3
+        max-time: 10
+    hardness:
+        chance: 15
+        damage: 2

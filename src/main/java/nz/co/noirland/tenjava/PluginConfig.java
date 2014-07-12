@@ -23,7 +23,7 @@ public class PluginConfig {
      * @return integer chance
      */
     public int getHardnessChance() {
-        return config.getInt("enchants.hardened.chance", 30);
+        return config.getInt("enchants.hardness.chance", 30);
     }
 
     /**
@@ -33,6 +33,14 @@ public class PluginConfig {
      */
     public int getHardnessDamage() {
         return config.getInt("enchant.hardness.damage", 2);
+    }
+
+    public int getCloakChance() {
+        return config.getInt("enchants.cloak.chance", 30);
+    }
+
+    public int getCloakTime() {
+        return config.getInt("enchants.cloak.time", 10);
     }
 
 }
