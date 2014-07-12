@@ -1,3 +1,6 @@
-name: ZephireNZ-t1
-main: com.tenjava.entries.ZephireNZ.t1.TenJava
-version: '${project.version}'
+author: ZephireNZ
+database: false
+main: nz.co.noirland.tenjava.BukCombatPlugin
+name: ${project.name}
+startup: postworld
+version: ${project.version}

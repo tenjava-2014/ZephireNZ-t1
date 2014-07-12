@@ -5,7 +5,7 @@
     <artifactId>tenjava</artifactId>
     <packaging>jar</packaging>
     <version>1.0-SNAPSHOT</version>
-    <name>TenJava</name>
+    <name>BukCombat</name>
     <developers>
         <developer>
             <id>ZephireNZ</id>
