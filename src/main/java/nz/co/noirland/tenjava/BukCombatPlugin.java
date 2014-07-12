@@ -37,7 +37,7 @@ public class BukCombatPlugin extends JavaPlugin {
         ShapelessRecipe flash = new ShapelessRecipe(new FlashBang());
         flash.addIngredient(1, Material.PAPER);
         flash.addIngredient(3, Material.SULPHUR);
-        flash.addIngredient(1, Material.GLOWSTONE);
+        flash.addIngredient(1, Material.GLOWSTONE_DUST);
         flash.addIngredient(1, Material.REDSTONE);
         getServer().addRecipe(flash);
     }
