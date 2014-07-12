@@ -3,23 +3,30 @@ package nz.co.noirland.tenjava.hardness;
 import nz.co.noirland.tenjava.BukCombatPlugin;
 import nz.co.noirland.tenjava.PluginConfig;
 import nz.co.noirland.tenjava.Util;
+import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.enchantment.EnchantItemEvent;
+import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
 
 public class CloakListener implements Listener {
 
     private final PluginConfig config = PluginConfig.inst();
-    private final Set<UUID> cloaked = new HashSet<UUID>();
+    private final HashMap<UUID, ItemStack> cloaked = new HashMap<UUID, ItemStack>();
 
     /**
      * Cloak enchantment generator
@@ -44,31 +51,65 @@ public class CloakListener implements Listener {
 //        Util.enchant(item);
     }
 
+    @EventHandler
+    public void onPreEnchant(PrepareItemEnchantEvent event) {
+        List<String> lore = event.getItem().getItemMeta().getLore();
+        if (lore.contains(BukCombatPlugin.CLOAK_NAME)) {
+            event.setCancelled(true);
+        }
+    }
+
     /**
      * Cloaking listener.
-     * @param event
      */
     @EventHandler
     public void onChangeSneak(PlayerToggleSneakEvent event) {
         Player player = event.getPlayer();
         if(!event.isSneaking()) {
-            if(cloaked.remove(player.getUniqueId())) {
-                player.removePotionEffect(PotionEffectType.INVISIBILITY);
-                player.removePotionEffect(PotionEffectType.BLINDNESS);
-                player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 5* 20, 2));
+            ItemStack chest = cloaked.remove(player.getUniqueId());
+            if(chest != null) {
+                removeEffects(player, chest);
             }
             return;
         }
-        ItemStack armour = player.getInventory().getChestplate();
-        if(!armour.hasItemMeta()) return;
-        if(!armour.getItemMeta().hasLore()) return;
+        ItemStack chest = player.getInventory().getChestplate();
+        if(chest == null || chest.getType() == Material.AIR) return;
+        if(!chest.hasItemMeta()) return;
+        if(!chest.getItemMeta().hasLore()) return;
 
-        List<String> lore = armour.getItemMeta().getLore();
+        List<String> lore = chest.getItemMeta().getLore();
         if (!lore.contains(BukCombatPlugin.CLOAK_NAME)) {
             return;
         }
         player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, config.getCloakTime() * 20, 1));
         player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, config.getCloakTime() * 20, 1));
-        player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, (config.getCloakTime() + 5)* 20, 2));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, (config.getCloakTime() + 15)* 20, 2));
+
+        cloaked.put(player.getUniqueId(), chest);
+        player.getInventory().setChestplate(null);
+    }
+
+    @EventHandler
+    public void onQuit(PlayerQuitEvent event) {
+        Player player = event.getPlayer();
+        ItemStack chest = cloaked.remove(player.getUniqueId());
+        if(chest != null) {
+            removeEffects(player, chest);
+        }
+    }
+
+    private void removeEffects(Player player, ItemStack chest) {
+        chest.setDurability((short)(chest.getDurability() + 100));
+        player.removePotionEffect(PotionEffectType.INVISIBILITY);
+        player.removePotionEffect(PotionEffectType.BLINDNESS);
+        player.removePotionEffect(PotionEffectType.WEAKNESS);
+        player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 15 * 20, 2));
+
+        if(chest.getDurability() >= chest.getType().getMaxDurability()) {
+            player.playSound(player.getLocation(), Sound.ANVIL_LAND, 1.0F, (float) (0.7 + Util.rand(0.5)));
+        }else {
+            player.getInventory().setChestplate(chest);
+            player.playSound(player.getLocation(), Sound.ITEM_BREAK, 1.0F, (float) (1.0 + Util.rand(0.5)));
+        }
     }
 }
