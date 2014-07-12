@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.enchantment.EnchantItemEvent;
+import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -100,6 +101,14 @@ public class HardnessListener implements Listener {
         lore.add(0, BukCombatPlugin.HARDNESS_NAME);
         meta.setLore(lore);
         item.setItemMeta(meta);
+    }
+
+    @EventHandler
+    public void onPreEnchant(PrepareItemEnchantEvent event) {
+        List<String> lore = event.getItem().getItemMeta().getLore();
+        if (lore.contains(BukCombatPlugin.CLOAK_NAME)) {
+            event.setCancelled(true);
+        }
     }
 
 }
