@@ -79,6 +79,10 @@ public class CombatListener implements Listener {
 
     }
 
+    /**
+     * DEBUG event for giving all zombies Hardness armour,
+     * TODO: REMOVE
+     */
     @EventHandler
     public void onSpawn(CreatureSpawnEvent event) {
         if(event.getEntityType() != EntityType.ZOMBIE) return;
