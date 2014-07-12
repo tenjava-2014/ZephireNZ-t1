@@ -1,13 +1,16 @@
 package nz.co.noirland.tenjava;
 
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.BrewerInventory;
+import org.bukkit.inventory.ItemStack;
 
 public class CombatListener implements Listener {
 
@@ -36,6 +39,13 @@ public class CombatListener implements Listener {
      */
     @EventHandler
     public void onPlayerHit(EntityDamageByEntityEvent event) {
+        // Don't care about anything that aren't players
+        if(event.getDamager().getType() != EntityType.PLAYER || event.getEntity().getType() != EntityType.PLAYER) return;
+        Player attacker = (Player) event.getDamager();
+        Player target = (Player) event.getEntity();
+
+        if(event.getCause() != EntityDamageEvent.DamageCause.ENTITY_ATTACK) return;
+        ItemStack weapon = attacker.getItemInHand();
 
     }
 
