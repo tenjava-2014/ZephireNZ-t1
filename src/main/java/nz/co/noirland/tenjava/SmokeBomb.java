@@ -17,7 +17,7 @@ public class SmokeBomb extends ItemStack {
         ItemMeta meta = getItemMeta();
         List<String> lore = new ArrayList<String>();
         lore.add("Throw the smoke bomb on the");
-        lore.add("ground and daze your foess!");
+        lore.add("ground and daze your foes!");
 
         meta.setDisplayName(SMOKE_BOMB_NAME);
         meta.setLore(lore);
