@@ -28,8 +28,15 @@ Maven will download all required dependencies and build a ready-for-use plugin p
 Usage
 -----
 
-1. Install plugin
-2. Do things with it
+This plugin adds a number of enchantments and 'throwables' to improve the combat experience in Minecraft.
 
-<!-- Hi, ZephireNZ! This is the default README for every ten.java submission. -->
-<!-- We encourage you to edit this README with some information about your submission – keep in mind you'll be scored on documentation! -->
+Enchantments:
+* Cloak - This enchantment will allow you to go invisibile for a short amount of time while crouching.
+    * To activate, sneak. You will be given invisibility, blindness and weakness.
+* Hardness - This enchantment is so strong that anyone attacking you takes extra damage to their weapon.
+    * Wearing more armour increases this effect.
+    * The player must be using a sword for this to work.
+    * All zombies spawn with a hardness chestplate so you can test this alone :)
+
+Throwables:
+* Flash Bang:
