@@ -35,10 +35,10 @@ public class BukCombatPlugin extends JavaPlugin {
         getServer().addRecipe(smoke);
 
         ShapelessRecipe flash = new ShapelessRecipe(new FlashBang());
-        smoke.addIngredient(1, Material.PAPER);
-        smoke.addIngredient(3, Material.SULPHUR);
-        smoke.addIngredient(1, Material.GLOWSTONE);
-        smoke.addIngredient(1, Material.REDSTONE);
+        flash.addIngredient(1, Material.PAPER);
+        flash.addIngredient(3, Material.SULPHUR);
+        flash.addIngredient(1, Material.GLOWSTONE);
+        flash.addIngredient(1, Material.REDSTONE);
         getServer().addRecipe(flash);
     }
 
